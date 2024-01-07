@@ -2,18 +2,18 @@
 
 namespace App;
 
-use App\ArmorType\IceBlockType;
-use App\ArmorType\LeatherArmorType;
-use App\ArmorType\ShieldType;
-use App\AttackType\BowType;
-use App\AttackType\FireBoltType;
-use App\AttackType\MultiAttackType;
-use App\AttackType\TwoHandedSwordType;
-use App\Builder\CharacterBuillder;
+use App\Builder\CharacterBuilder;
+use App\Builder\CharacterBuilderFactory;
 use App\Character\Character;
 
 class GameApplication
 {
+    public function __construct(
+        private CharacterBuilderFactory $characterBuilderFactory
+    )
+    {
+    }
+
     public function play(Character $player, Character $ai): FightResult
     {
         $player->rest();
@@ -97,8 +97,8 @@ class GameApplication
         return $player->getCurrentHealth() <= 0;
     }
 
-    private function createCharacterBuilder(): CharacterBuillder
+    private function createCharacterBuilder(): CharacterBuilder
     {
-        return new CharacterBuillder();
+        return $this->characterBuilderFactory->createBuilder();
     }
 }
